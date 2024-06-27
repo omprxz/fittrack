@@ -1,0 +1,38 @@
+.about-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.about-title {
+  margin-bottom: 20px;
+}
+
+.about-subtitle {
+  font-size: 1.5rem;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.about-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.about-feature-list {
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+.about-feature-item {
+  margin-bottom: 10px;
+}
+
+.about-feature-item::before {
+  content: "\2022";
+  color: #007bff;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
