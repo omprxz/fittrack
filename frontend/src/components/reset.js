@@ -42,10 +42,10 @@ const Reset = () => {
 
       if (response.data.icon === 'success') {
         setotpSent(true)
-        setAlertMessage('OTP sent successfully');
+        setAlertMessage(response.data.message);
         setAlertMessageColor('bg-green-500');
       } else {
-        setAlertMessage('Failed to send OTP');
+        setAlertMessage(response.data.message);
         setAlertMessageColor('bg-red-500');
       }
     } catch (error) {
