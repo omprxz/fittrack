@@ -99,7 +99,7 @@ export default function Categories() {
                         }
                     })
                     .catch((error) => {
-                        Swal.showValidationMessage(`Request failed: ${error}`);
+                        Swal.showValidationMessage(`Request failed: ${error.message}`);
                     });
             },
             allowOutsideClick: () => !Swal.isLoading()

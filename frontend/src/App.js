@@ -3,7 +3,6 @@ import { Link, BrowserRouter, Routes, Route, useNavigate } from 'react-router-do
 import ScrollToTop from './components/ScrollToTop';
 import Signup from './components/signup';
 import Login from './components/login';
-import Home from './home';
 import Nav from './components/nav';
 import Settings from './components/settings';
 import Categories from './components/categories';
@@ -32,7 +31,7 @@ function App() {
 }, []);
 
   return (
-    <div className="App">
+    <div className="App bg-gray-200">
     <BrowserRouter>
     <ScrollToTop />
     <Nav/>

@@ -486,7 +486,7 @@ app.post('/api/sendotp', async (req, res) => {
     });
   }else{
     res.json({
-      message: "Email doesn't exist",
+      message: "Email not associated with any account.",
       icon: "error"
     });
     }
