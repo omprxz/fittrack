@@ -134,6 +134,10 @@ const deleteFileFromDrive = async (fileId, authClient) => {
   }
 };
 
+app.get("/", (req, resp) => {
+  resp.send('<h5>FitTrack API Working...</h5>')
+})
+
 app.post("/api/signup", async (req, resp) => {
     const { name, email, password, ip } = req.body;
     if (name && email && password) {
