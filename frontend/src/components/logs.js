@@ -29,16 +29,18 @@ export default function View(){
   const api_baseurl = process.env.REACT_APP_API_URL
   const cLog = console.log
   const cErr = console.error
-  const userId = auth?.logIn?._id;
-
-    if (!auth && !auth.logIn) {
-      navigate("/");
+  const userId = JSON.parse(auth)?.logIn?._id;
+  useEffect(() => {
+    if (!JSON.parse(auth)?.logIn?._id) {
+      navigate('/login');
     }
-
+  }, [navigate]);
+  
 
   const [logs, setLogs] =useState([])
   const [thisDate, setThisDate] =useState()
   const [categories, setCategories] =useState([])
+  const [alertMsg, setalertMsg] = useState("Please wait...")
   const [dateRange, setDateRange] = useState({
     startDate: null,
     endDate: null
@@ -50,9 +52,18 @@ export default function View(){
   const [query, setQuery] =useState(`userId=${userId}&isLatest=true&start_date=&end_date=&categories=`)
   
   const fetchLogs = async (param) => {
+    try{
     const response = await axios.get(`${api_baseurl}/api/logs?${param}`)
     if(response.data.icon == 'success'){
       setLogs(response.data.logs)
+      if(response.data.logs.length == 0){
+        setalertMsg('No logs found.')
+      }
+    }else{
+        setalertMsg("Can't fetch your logs. Try again later.")
+      }
+    }catch(e){
+       setalertMsg("Can't fetch your logs. Try again later.")
     }
   }
   const fetchCategs = async () => {
@@ -204,16 +215,16 @@ const handleCheckboxChange = (id) => {
 </li>
  
 </ul>
+    <p className='text-center my-3'><Link to='/logs/new' className='text-s text-blue-600 underline underline-offset-1' >Create New +</Link></p>
       {logs.length > 0 ? (
         <>
           <div className="allLogs">
             <h1 className='font-bold text-2xl my-3 text-center'>Logs</h1>
-            <p className='text-center my-3'><Link to='/logs/new' className='text-s text-blue-600 underline underline-offset-1' >Create New +</Link></p>
             <div className="dateLogs grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 place-items-center px-8 gap-5 mb-6 mt-1">
               {logs.map((log, index) => (
                 <div key={index}>
                 
-                  <Card key={index} userId={userId} imgs={log.photos} date={formatDate(log.date)} weight={log.weight} wUnit={log.weightUnit} height={log.height} logId={log._id} hUnit={log.heightUnit} fat={log.fat} categs={log.categories} note={log.note}
+                  <Card cardKey={index} userId={userId} imgs={log.photos} date={formatDate(log.date)} weight={log.weight} wUnit={log.weightUnit} height={log.height} logId={log._id} hUnit={log.heightUnit} fat={log.fat} categs={log.categories} note={log.note}
                   handleDeleteConfirmation={handleDeleteConfirmation}/>
                   
                 </div>
@@ -222,7 +233,7 @@ const handleCheckboxChange = (id) => {
           </div>
         </>
       ) : (
-        <p className="py-10 text-center text-gray-600">No Any Logs. <Link to="/logs/new" className="text-blue-700 underline">Create one +</Link></p>
+        <p className="py-10 text-center text-gray-800">{alertMsg}</p>
       )}
     </div>
   );

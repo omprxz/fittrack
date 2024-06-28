@@ -8,9 +8,10 @@ const MySwal = withReactContent(Swal);
 
 const ChangePass = () => {
   const navigate = useNavigate();
+  const userId = JSON.parse(localStorage.getItem("user"))?.logIn?._id;
   const auth = localStorage.getItem('user');
   useEffect(() => {
-    if (!auth) {
+    if (!JSON.parse(auth)?.logIn?._id) {
       navigate('/login');
     }
   }, [navigate]);
@@ -26,9 +27,7 @@ const ChangePass = () => {
         }
     });
   const api_baseurl = process.env.REACT_APP_API_URL
-  const logIn = JSON.parse(localStorage.getItem('user')).logIn
   
-  const [userId, setuserId] = useState(logIn._id)
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

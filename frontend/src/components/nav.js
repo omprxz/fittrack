@@ -17,31 +17,35 @@ export default function Nav() {
   let logIn = {}
   
   if(auth){
-   logIn = JSON.parse(localStorage.getItem('user')).logIn
+   logIn = JSON.parse(localStorage.getItem('user'))?.logIn
   }
   
   
   
   const [ppPrev, setppPrev] = useState('/user.jpg')
-  const [prevPpId, setprevPpId] = useState('/user.jpg')
+  const [ppPrevId, setppPrevId] = useState('/user.jpg')
   const fetchUser = async () => {
-    if (logIn._id) {
-        const { data: { user } } = await axios.get(`${api_baseurl}/api/user?userId=${logIn._id}`);
-        if (user.pp !== prevPpId) {
-            setppPrev(user.pp ? `https://lh3.googleusercontent.com/d/${user.pp}=w1000` : '/user.jpg');
-            setprevPpId(user.pp);
+    const logInInner = JSON.parse(localStorage.getItem('user'))?.logIn
+    if (logInInner) {
+      if(logInInner?.pp){
+        if(logInInner?.pp != ppPrevId){
+      setppPrev(logInInner?.pp ? `https://lh3.googleusercontent.com/d/${logInInner?.pp}=w1000` : '/user.jpg');
+      setppPrevId(logInInner?.pp)
         }
+      }else{
+        setppPrev('/user.jpg')
+        setppPrevId('/user.jpg')
+      }
     }
 };
 
 useEffect(() => {
     fetchUser();
 }, [logIn]);
-
 useEffect(() => {
     const intervalId = setInterval(() => {
         fetchUser();
-    }, 20000);
+    }, 5000);
     return () => clearInterval(intervalId);
 }, []);
 

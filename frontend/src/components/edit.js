@@ -27,8 +27,13 @@ function Edit() {
   const api_baseurl = process.env.REACT_APP_API_URL
   const {logId} = useParams()
   const cLog = console.log
-  const userId = JSON.parse(localStorage.getItem("user")).logIn._id;
-  
+  const userId = JSON.parse(localStorage.getItem("user"))?.logIn?._id;
+  const auth = localStorage.getItem('user');
+  useEffect(() => {
+    if (!JSON.parse(auth)?.logIn?._id) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
 
     const animatedComponents = makeAnimated();
@@ -83,6 +88,7 @@ function Edit() {
     const [fileInputKey, setFileInputKey] = useState("");
     const [imageError, setImageError] = useState("");
     const [date, setDate] = useState("");
+    const [alertMsg, setalertMsg] = useState("Please wait...")
     
     
     const maxImage = 8;
@@ -241,6 +247,8 @@ var kolTime = convertToKolkataTime(dateReceived);
             setFat(logTemp[0].fat);
             setNote(logTemp[0].note);
             setDate(convertToKolkataTime(logTemp[0].date))
+      }else{
+        setalertMsg("This log has been either deleted or you don't have its access.")
       }
     }
     
@@ -258,12 +266,13 @@ var kolTime = convertToKolkataTime(dateReceived);
         setDate(datetime);
     }, []);
     useEffect(() => {
-      fetchLog(`logId=${logId}`)
+      fetchLog(`logId=${logId}&userId=${userId}`)
     },[])
     
     return (
         <div className="container mx-auto px-4 bg-gray-900 pt-5 min-h-screen">
         <h1 className="text-center mb-3 font-bold text-2xl text-white">Edit Log</h1>
+        {log.length > 0 ? ( <>
         <p class="text-center text-red-500 mb-3 text-sm">NOTE: Photos may take 2-3 minutes to appear after logging.</p>
         {log.map((item) => (
             <form key={item._id} onSubmit={Save} encType="multipart/form-data">
@@ -477,6 +486,10 @@ var kolTime = convertToKolkataTime(dateReceived);
                 
             </form>
             ))}
+             </>
+        ) : (
+          <p className='text-center text-gray-300 my-12 px-5 text-sm'>{alertMsg}</p>
+          )}
         </div>
     );
 }

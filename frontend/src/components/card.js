@@ -9,7 +9,7 @@ export default function Card(props) {
   
   return(
     <>
-    <div className='rounded-lg bg-gray-900 p-3'>
+    <div key={props.cardKey} className='rounded-lg bg-gray-900 p-3'>
     <div className="flex justify-around items-center text-white select-none pt-1 pb-4 bg-transparent">
     <p className="rounded bg-red-600 text-white px-4 py-1" onClick={handleDelete}>Delete</p>
     <Link to={`/logs/${props.logId}/view`} className="rounded bg-green-600 px-5 py-1">View</Link>

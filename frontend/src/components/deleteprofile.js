@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -7,8 +7,13 @@ const api_baseurl = process.env.REACT_APP_API_URL;
 
 const DeleteProfile = () => {
   const [confirmationInput, setConfirmationInput] = useState('');
-  const logIn = JSON.parse(localStorage.getItem('user')).logIn
-  const [userId, setUserId] = useState(logIn._id)
+  const userId = JSON.parse(localStorage.getItem("user"))?.logIn?._id;
+  const auth = localStorage.getItem('user');
+  useEffect(() => {
+    if (!JSON.parse(auth)?.logIn?._id) {
+      navigate('/login');
+    }
+  }, [navigate]);
   const [deleting, setdeleting] = useState(false)
   const navigate = useNavigate();
   const logOut = () => {

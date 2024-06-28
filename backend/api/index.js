@@ -47,7 +47,6 @@ const upload = multer({ storage: storage });
 const SCOPE = ["https://www.googleapis.com/auth/drive"];
 async function authorize() {
   const googleApi = JSON.parse(process.env.GOOGLE_DRIVE_API_CREDS);
-  console.log(googleApi)
   const jwtClient = new google.auth.JWT(
     googleApi.client_email,
     null,
@@ -130,8 +129,8 @@ const deleteFileFromDrive = async (fileId, authClient) => {
     });
     return true;
   } catch (err) {
-    console.error(`Error deleting file ${fileId} from Google Drive:`, err);
-    throw err;
+    console.error(`Error deleting file ${fileId} from Google Drive`);
+    throw `Error deleting file ${fileId} from Google Drive`;
   }
 };
 
@@ -147,20 +146,20 @@ app.post("/api/signup", async (req, resp) => {
             try {
                 const checkUser = await User.findOne({ email: email });
                 if (checkUser) {
-                    resp.status(200).json({
+                    resp.json({
                         message: "Email id already exists",
                         signedUp: false
                     });
                 } else {
                     await User.create({ name, email, password, ip });
-                    resp.status(200).json({
+                    resp.json({
                         message: "User registered successfully",
                         signedUp: true
                     });
                 }
             } catch (e) {
                 console.error(e);
-                resp.status(200).json({
+                resp.json({
                     message: "Error while saving details"
                 });
             }
@@ -175,10 +174,7 @@ app.post("/api/signup", async (req, resp) => {
 app.post("/api/login", async (req, resp) => {
     try {
         const { email, password } = req.body;
-        const logIn = await User.findOne({ email, password })
-            .select("-password")
-            .select("-ip")
-            .select("-createdAt");
+        
         if (email && password) {
             if (!emailRegex.test(email)) {
                 return resp.json({
@@ -186,8 +182,11 @@ app.post("/api/login", async (req, resp) => {
                     signedUp: false
                 });
             } else {
+              const logIn = await User.findOne({ email, password })
+            .select("-password")
+            .select("-ip");
                 if (logIn) {
-                    resp.status(200).json({
+                    resp.json({
                         message: "Logged in",
                         creds: {
                             logIn
@@ -195,7 +194,7 @@ app.post("/api/login", async (req, resp) => {
                         loggedIn: true
                     });
                 } else {
-                    resp.status(200).json({
+                    resp.json({
                         message: "Invalid credentials"
                     });
                 }
@@ -206,7 +205,7 @@ app.post("/api/login", async (req, resp) => {
             });
         }
     } catch (e) {
-        resp.status(200).json({
+        resp.json({
             message: "Internal server error"
         });
     }
@@ -214,12 +213,19 @@ app.post("/api/login", async (req, resp) => {
 
 app.get("/api/user", async (req, resp) => {
   const {userId} = req.query
+  try{
   const response = await User.findOne({_id: userId}).select("-password -_id -ip")
   if(response){
     resp.json({
       message: "Details fetched",
       icon: "success",
       user: response
+    })
+  }
+  }catch(e){
+    resp.json({
+      message: "Can't fetch details",
+      icon: "error"
     })
   }
 })
@@ -230,7 +236,7 @@ app.delete("/api/user", async (req, resp) => {
   try {
     const user = await User.findOne({ _id: userId });
     if (!user) {
-      return resp.status(404).json({
+      return resp.json({
         message: "User not found",
         icon: "error"
       });
@@ -266,14 +272,13 @@ app.delete("/api/user", async (req, resp) => {
     });
   } catch (error) {
     console.error("Error deleting user data:", error);
-    resp.status(500).json({
+    resp.json({
       message: "Error deleting user data",
       icon: "error",
       error: error.message
     });
   }
 });
-
 app.put("/api/user", upload.single("profile"), async (req, resp) => {
   const { name, email, userId } = req.body
   let update;
@@ -309,7 +314,7 @@ app.put("/api/user", upload.single("profile"), async (req, resp) => {
             await image.toFile(photoPath);
             try {
               const authClient = await authorize();
-              const fileId = await uploadFile(authClient, { path: photoPath, mimetype: photo.mimetype, originalname: photo.originalname }, "1-QzJUwBXnjW25_JC59_298vgZ9W2iQtt");
+              const fileId = await uploadFile(authClient, { path: photoPath, mimetype: photo.mimetype, originalname: photo.originalname }, process.env.DRIVE_PPPHOTOS_DIR);
               try{
               let userData = await User.findById(userId)
               await deleteFileFromDrive(userData.pp, authClient)
@@ -330,7 +335,8 @@ app.put("/api/user", upload.single("profile"), async (req, resp) => {
     }
   }
   if(update.modifiedCount > 0){
-    resp.json({message: "Profile Updated.", icon: "success"})
+    const userDets = await User.findOne({_id: userId}).select("-password -ip");
+    resp.json({message: "Profile Updated.", icon: "success", user: {logIn: userDets}})
   }else{
     resp.json({message: "No update made.", icon: "info"})
   }
@@ -358,20 +364,20 @@ app.get("/api/usermeta", async (req, resp) => {
       user: response
     });
   } catch (err) {
-    resp.status(500).json({ message: err.message, icon: "error" });
+    resp.json({ message: err.message, icon: "error" });
   }
 });
 
 app.patch('/api/user/password', async (req, resp) => {
   const { userId, currentPassword, newPassword } = req.body;
   if(currentPassword == ""){
-      return resp.status(400).json({
+      return resp.json({
         message: 'Current password required',
         icon: 'error'
       });
     }
   if(newPassword == ""){
-      return resp.status(400).json({
+      return resp.json({
         message: 'New password required',
         icon: 'error'
       });
@@ -380,14 +386,14 @@ app.patch('/api/user/password', async (req, resp) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return resp.status(404).json({
+      return resp.json({
         message: 'User not found',
         icon: 'error'
       });
     }
 
     if (user.password !== currentPassword) {
-      return resp.status(400).json({
+      return resp.json({
         message: 'Current password is incorrect',
         icon: 'error'
       });
@@ -402,7 +408,7 @@ app.patch('/api/user/password', async (req, resp) => {
     });
   } catch (error) {
     console.error(error);
-    resp.status(500).json({
+    resp.json({
       message: 'Error while updating password',
       icon: 'error'
     });
@@ -413,18 +419,18 @@ app.patch('/api/user/deletepp', async (req, res) => {
   const { userId } = req.body;
 
   if (!userId) {
-    return res.status(400).json({ message: 'User ID is required', icon: 'error' });
+    return res.json({ message: 'User ID is required', icon: 'error' });
   }
 
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User not found', icon: 'error' });
+      return res.json({ message: 'User not found', icon: 'error' });
     }
 
     const profilePhotoId = user.pp;
     if (!profilePhotoId) {
-      return res.status(400).json({ message: 'No profile photo to delete', icon: 'info' });
+      return res.json({ message: 'No profile photo to delete', icon: 'info' });
     }
 
     const authClient = await authorize();
@@ -436,7 +442,7 @@ app.patch('/api/user/deletepp', async (req, res) => {
     res.json({ message: 'Profile photo removed', icon: 'success' });
   } catch (error) {
     console.error('Error deleting profile photo:', error);
-    res.status(500).json({ message: 'Internal server error', icon: 'error' });
+    res.json({ message: 'Internal server error', icon: 'error' });
   }
 });
 
@@ -459,7 +465,7 @@ app.get('/api/user/export', async (req, res) => {
 
     res.json(userData);
   } catch (error) {
-    res.status(500).json({ message: 'Error exporting data', icon: 'error', error: error.message });
+    res.json({ message: 'Error exporting data', icon: 'error', error: error.message });
   }
 });
 
@@ -474,7 +480,7 @@ app.post('/api/sendotp', async (req, res) => {
     });
   } catch (error) {
     console.error('Error sending OTP:', error);
-    res.status(500).json({
+    res.json({
       message: 'Failed to send OTP',
       icon: 'error',
       error: error.message,
@@ -494,7 +500,7 @@ app.post('/api/resetpassword', async (req, res) => {
     });
   } catch (error) {
     console.error('Error resetting password:', error);
-    res.status(500).json({
+    res.json({
       message: 'Failed to reset password',
       icon: 'error',
       error: error.message,
@@ -534,10 +540,10 @@ app.post("/api/categories", async (req, resp) => {
                 });
             }
         } catch (error) {
-            resp.status(200).json({ message: "Internal Server Error" });
+            resp.json({ message: "Internal Server Error" });
         }
     } else {
-        resp.status(200).json({
+        resp.json({
             message: "All fields mandatory"
         });
     }
@@ -561,10 +567,10 @@ app.get("/api/categories", async (req, resp) => {
                 });
             }
         } catch (error) {
-            resp.status(200).json({ message: "Internal Server Error" });
+            resp.json({ message: "Internal Server Error" });
         }
     } else {
-        resp.status(200).json({
+        resp.json({
             message: "User ID is required"
         });
     }
@@ -596,19 +602,19 @@ app.delete("/api/categories", async (req, resp) => {
                     icon: "success"
                 });
             } else {
-                resp.status(200).json({
+                resp.json({
                     message: "User not found",
                     icon: "error"
                 });
             }
         } catch (error) {
-            resp.status(200).json({
+            resp.json({
                 message: error.message || "Internal Server Error",
                 icon: "error"
             });
         }
     } else {
-        resp.status(200).json({
+        resp.json({
             message: "Category index and user ID are required",
             icon: "error"
         });
@@ -639,24 +645,24 @@ app.put("/api/categories", async (req, resp) => {
                         });
                     }
                 } else {
-                    resp.status(200).json({
+                    resp.json({
                         message: "Invalid category"
                     });
                 }
             } else {
-                resp.status(200).json({
+                resp.json({
                     message: "User not found",
                     icon: "error"
                 });
             }
         } catch (error) {
-            resp.status(200).json({
+            resp.json({
                 message: "Internal Server Error",
                 icon: "error"
             });
         }
     } else {
-        resp.status(200).json({
+        resp.json({
             message: "User ID, category, and new value are required",
             icon: "error"
         });
@@ -700,19 +706,19 @@ app.post("/api/log", upload.array("photos", 8), async (req, resp) => {
 
     let upPhotos = [];
     if (!req.files || req.files.length === 0) {
-      resp.status(200).json({
+      resp.json({
         message: "No images provided.",
         icon: "error"
       });
     } else {
       if (req.files.length > 8 || req.files.length == 0) {
         if (req.files.length > 8) {
-        resp.status(200).json({
+        resp.json({
           message: "Max allowed images are 8 only.",
           icon: "error"
         });
       }else if (req.files.length == 0) {
-        resp.status(200).json({
+        resp.json({
           message: "There must be at least one image.",
           icon: "error"
         });
@@ -756,7 +762,7 @@ app.post("/api/log", upload.array("photos", 8), async (req, resp) => {
             }
             await image.toFile(photoPath);
             try {
-              const fileId = await uploadFile(authClient, { path: photoPath, mimetype: photo.mimetype, originalname: photo.originalname }, "1-MgMjM1UCNna1QJH1wTECIvzhTJcX1HM");
+              const fileId = await uploadFile(authClient, { path: photoPath, mimetype: photo.mimetype, originalname: photo.originalname }, process.env.DRIVE_LOGPHOTOS_DIR);
               upPhotos.push(fileId);
             } catch (err) {
               loopResp.message = err.message;
@@ -773,7 +779,7 @@ app.post("/api/log", upload.array("photos", 8), async (req, resp) => {
         }
 
         if (loopResp.icon !== "noerr") {
-          resp.status(200).json(loopResp);
+          resp.json(loopResp);
         } else {
           const LogSave = await Logs.create({
             userId,
@@ -788,13 +794,13 @@ app.post("/api/log", upload.array("photos", 8), async (req, resp) => {
             note: sanitizedNote
           });
           if (LogSave) {
-            resp.status(200).json({
+            resp.json({
               message: "Log saved successfully.",
               log: LogSave,
               icon: "success"
             });
           } else {
-            resp.status(200).json({
+            resp.json({
               message: "Can't save log.",
               log: LogSave,
               icon: "error"
@@ -805,28 +811,31 @@ app.post("/api/log", upload.array("photos", 8), async (req, resp) => {
     }
   } catch (error) {
     console.log(error);
-    resp.status(200).json({
+    resp.json({
       message: "Error while saving log.",
       icon: "error"
     });
     console.log(error);
   }
 });
-
 app.get("/api/log", async (req, resp) => {
-    const { logId } = req.query;
-    const logFetched = await Logs.find({ _id: logId });
-    if(logFetched.length > 0){
-    resp.json({
-        message: "Log fetched",
-        icon: "success",
-        log: logFetched
-    })
-    }else{
-      resp.json({
-        message: "Log not found",
-        icon: "error"
-    })
+    const { logId, userId } = req.query;
+    try {
+        const logFetched = await Logs.find({ _id: logId, userId });
+        if(logFetched.length > 0){
+            resp.json({
+                message: "Log fetched",
+                icon: "success",
+                log: logFetched
+            });
+        } else {
+            resp.json({
+                message: "Log not found",
+                icon: "error"
+            });
+        }
+    } catch (err) {
+        resp.json({message: err.message, icon: 'error'});
     }
 });
 
@@ -845,7 +854,6 @@ app.put("/api/log", upload.array("photos", 8), async (req, resp) => {
       note,
       deletedImage
     } = req.body;
-    console.log('body: ',req.body, ' :body')
     weight = weight == "null" ? null : weight
     height = height == "null" ? null : height
     fat = fat== "null" ? null : fat
@@ -856,11 +864,13 @@ app.put("/api/log", upload.array("photos", 8), async (req, resp) => {
       allowedTags: [],
       allowedAttributes: {}
     });
-  
+    
+    const logFetched = await Logs.find({_id: logId})
+    
     if (deletedImage.length >= logFetched[0].photos.length) {
       if(req.files){
       if(req.files.length == 0){
-        resp.status(200).json({
+        resp.json({
           message: "There must be at least one image.",
           icon: "error"
         });
@@ -874,7 +884,7 @@ app.put("/api/log", upload.array("photos", 8), async (req, resp) => {
 
     if (req.files) {
       if (req.files.length > 8) {
-        resp.status(200).json({
+        resp.json({
           message: "Max allowed images are 8 only.",
           icon: "error"
         });
@@ -891,7 +901,7 @@ app.put("/api/log", upload.array("photos", 8), async (req, resp) => {
       for (const photo of req.files) {
         let photoSize = photo.size;
         if (photoSize > sizeLimitInMB * 1024 * 1024) {
-          resp.status(200).json({
+          resp.json({
             message: `Max file size limit is ${sizeLimitInMB} MB for each image`,
             icon: "error"
           });
@@ -924,11 +934,11 @@ app.put("/api/log", upload.array("photos", 8), async (req, resp) => {
 
         try {
           const authClient = await authorize();
-          const fileId = await uploadFile(authClient, { path: photoPath, mimetype: photo.mimetype, originalname: photo.originalname }, "1-MgMjM1UCNna1QJH1wTECIvzhTJcX1HM");
+          const fileId = await uploadFile(authClient, { path: photoPath, mimetype: photo.mimetype, originalname: photo.originalname },process.env.DRIVE_LOGPHOTOS_DIR);
           upPhotos.push(fileId);
         } catch (err) {
           console.error(`Error uploading file ${photo.originalname}:`, err);
-          resp.status(500).json({
+          resp.json({
             message: `Error uploading file ${photo.originalname}`,
             icon: "error"
           });
@@ -993,7 +1003,7 @@ app.put("/api/log", upload.array("photos", 8), async (req, resp) => {
           await deleteFileFromDrive(photo, authClient)
         });
 
-        resp.status(200).json({
+        resp.json({
           message: "Log updated successfully.",
           log: updatedLog,
           icon: "success"
@@ -1005,14 +1015,14 @@ app.put("/api/log", upload.array("photos", 8), async (req, resp) => {
         });
       }
     } else {
-      resp.status(404).json({
+      resp.json({
         message: "Log not found.",
         icon: "error"
       });
     }
   } catch (error) {
     console.error("Error while updating log:", error);
-    resp.status(500).json({
+    resp.json({
       message: "Error while updating log.",
       error: error.message,
       icon: "error"
@@ -1038,18 +1048,18 @@ app.delete("/api/log", async (req, resp) => {
                     icon: "success"
                 });
             } else {
-                resp.status(200).json({
+                resp.json({
                     message: "Log not found"
                 });
             }
         } else {
-            resp.status(200).json({
+            resp.json({
                 message: "No ID Selected"
             });
         }
     } catch (error) {
         console.error("Error occurred while deleting:", error);
-        resp.status(200).json({
+        resp.json({
             message: "Error occurred while deleting: " + error
         });
     }
@@ -1107,7 +1117,7 @@ try {
   });
 } catch (err) {
   console.error(err);
-  resp.status(500).json({ error: err.message });
+  resp.json({ error: err.message });
 }
 });
 

@@ -12,7 +12,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const auth = localStorage.getItem('user');
   useEffect(() => {
-    if (!auth) {
+    if (!JSON.parse(auth)?.logIn?._id) {
       navigate('/login');
     }
   }, [navigate]);
@@ -28,12 +28,12 @@ export default function Profile() {
         }
     });
   const api_baseurl = process.env.REACT_APP_API_URL
-  const logIn = JSON.parse(localStorage.getItem('user')).logIn
+  const logIn = JSON.parse(localStorage.getItem('user'))?.logIn
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   
   const [ppChanged, setppChanged] = useState(false)
   const [msg, setmsg] = useState('')
-  const [userId, setuserId] = useState(logIn._id)
+  const [userId, setuserId] = useState(logIn?._id)
   const [pp, setpp] = useState(null)
   const [ppPrev, setppPrev] = useState('user.jpg')
   const [name, setname] = useState('')
@@ -56,21 +56,21 @@ export default function Profile() {
 };
  
   const fetchUser = async () => {
-    const response = await axios.get(`${api_baseurl}/api/user?userId=${logIn._id}`)
-    if(response){
-      setname(response.data.user.name)
-      setemail(response.data.user.email)
-      setppPrev(response.data.user.pp ? `https://lh3.googleusercontent.com/d/${response.data.user.pp}=w1000` : 'user.jpg')
+    if (JSON.parse(auth)?.logIn){
+      const userDets = JSON.parse(auth)?.logIn
+      setname(userDets.name)
+      setemail(userDets.email)
+      setppPrev(userDets.pp ? `https://lh3.googleusercontent.com/d/${userDets.pp}=w1000` : 'user.jpg')
       setTimeout(()=>{
-      setppPrev(response.data.user.pp ? `https://lh3.googleusercontent.com/d/${response.data.user.pp}=w1000` : 'user.jpg')
-      setuserSince(formatDate(response.data.user.created_at) || 'N/A');
+      setppPrev(userDets.pp ? `https://lh3.googleusercontent.com/d/${userDets.pp}=w1000` : 'user.jpg')
+      setuserSince(formatDate(userDets.created_at) || 'N/A');
       }, 1000)
     }
   }
   
   const fetchUserMeta = async () => {
   try {
-    const response = await axios.get(`${api_baseurl}/api/usermeta?userId=${logIn._id}`);
+    const response = await axios.get(`${api_baseurl}/api/usermeta?userId=${logIn?._id}`);
     if (response && response.data && response.data.user) {
       const userMeta = response.data.user;
       setweight(userMeta.weight !== null && userMeta.weight !== undefined && userMeta.weight !== "" ? userMeta.weight : "N/A");
@@ -152,6 +152,7 @@ export default function Profile() {
         icon: update.data.icon
       })
       if(update.data.icon == 'success'){
+        localStorage.setItem('user', JSON.stringify(update.data.user));
         seteditMode(false)
         setupdating(false)
       }
@@ -178,7 +179,7 @@ export default function Profile() {
     }
     }
   
-const handlePPRemove = async () => {
+  const handlePPRemove = async () => {
   try {
     setupdating(true)
     const response = await axios.patch(`${api_baseurl}/api/user/deletepp`, { userId });
@@ -186,6 +187,11 @@ const handlePPRemove = async () => {
       title: response.data.message,
       icon: response.data.icon,
     });
+    if(response.data.icon == 'success'){
+      const userDets = JSON.parse(localStorage.getItem('user'))
+      userDets.logIn.pp = null
+      localStorage.setItem('user', JSON.stringify(userDets));
+    }
     setupdating(false)
   seteditMode(false)
   setppChanged(false)
@@ -198,7 +204,6 @@ const handlePPRemove = async () => {
   }
   setupdating(false)
 };
-
   
   return(
       <div className="flex flex-col items-center w-full bg-gray-900 min-h-screen py-3 relative">
@@ -206,7 +211,7 @@ const handlePPRemove = async () => {
           <img src={ppPrev} className="rounded-full aspect-square w-24 object-cover" />
           <div className={`${!editMode || updating ? 'hidden' : 'flex'} absolute bottom-0.5 right-0.5 w-7 h-7 bg-gray-300 rounded-full justify-center items-center`}>
             <label htmlFor="pp"><FaPen className="text-black" /></label>
-            <input type="file" id="pp" className='hidden' disabled={!editMode} accept="image/*" onChange={handlePpChange} />
+            <input type="file" id="pp" className='hidden' disabled={!editMode || updating} accept="image/*" onChange={handlePpChange} />
           </div>
         </label>
         <p className={`${editMode ? 'block' : 'hidden'} text-center text-red-600 text-sm mt-4`}>Max Image Size 2MB. (Use Square Image for Better Look)</p>

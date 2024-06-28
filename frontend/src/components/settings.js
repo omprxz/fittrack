@@ -5,9 +5,8 @@ import { PaperClipIcon } from '@heroicons/react/20/solid'
 export default function Settings() {
   const navigate = useNavigate();
   const auth = localStorage.getItem('user');
-  
   useEffect(() => {
-    if (!auth) {
+    if (!JSON.parse(auth)?.logIn?._id) {
       navigate('/login');
     }
   }, [navigate]);

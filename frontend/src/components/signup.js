@@ -8,7 +8,7 @@ function Signup() {
   const [alertMessage, setAlertMessage] = useState('');
   useEffect(() => {
     const auth = localStorage.getItem('user');
-    if (auth) {
+    if (JSON.parse(auth)?.logIn?._id) {
       navigate('/');
     }
 }, []);

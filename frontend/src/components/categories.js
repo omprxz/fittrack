@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import axios from "axios";
@@ -8,9 +8,15 @@ import { PlusIcon, PencilSquareIcon, TrashIcon, CheckIcon } from "@heroicons/rea
 const MySwal = withReactContent(Swal);
 
 export default function Categories() {
-    const user = JSON.parse(localStorage.getItem("user"));
     const api_baseurl = process.env.REACT_APP_API_URL
-    const userId = user && user.logIn ? user.logIn._id : null;
+    const navigate = useNavigate()
+    const userId = JSON.parse(localStorage.getItem("user"))?.logIn?._id;
+    const auth = localStorage.getItem('user');
+  useEffect(() => {
+    if (!JSON.parse(auth)?.logIn?._id) {
+      navigate('/login');
+    }
+  }, [navigate]);
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {

@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
@@ -7,7 +8,15 @@ const imgbb_api = imgbb_apis[0].trim();
 const api_baseurl = process.env.REACT_APP_API_URL;
 
 export default function DataManagement() {
-  const logIn = JSON.parse(localStorage.getItem('user')).logIn;
+  const navigate = useNavigate()
+    const logIn = JSON.parse(localStorage.getItem("user"))?.logIn;
+    const userId = JSON.parse(localStorage.getItem("user"))?.logIn?._id;
+    const auth = localStorage.getItem('user');
+  useEffect(() => {
+    if (!JSON.parse(auth)?.logIn?._id) {
+      navigate('/login');
+    }
+  }, [navigate]);
   const [exporting, setExporting] = useState(false);
   const exportButtonRef = useRef(null);
 
@@ -38,7 +47,7 @@ export default function DataManagement() {
     try {
       setExporting(true);
       const response = await axios.get(`${api_baseurl}/api/user/export`, {
-        params: { userId: logIn._id }
+        params: { userId: logIn?._id }
       });
       const userData = response.data;
 

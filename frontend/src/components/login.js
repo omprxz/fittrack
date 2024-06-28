@@ -15,10 +15,10 @@ function Login() {
   const navigate = useNavigate()
   const api_baseurl = process.env.REACT_APP_API_URL
   useEffect(() => {
-    const auth = localStorage.getItem('user');
-    if (auth) {
+     const auth = localStorage.getItem('user');
+    if (JSON.parse(auth)?.logIn?._id) {
       navigate('/');
-  }
+    }
 }, []);
   
   const [formData, setFormData] = useState({

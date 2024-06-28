@@ -25,20 +25,24 @@ const View = () => {
   const navigate = useNavigate()
   const {logId} = useParams();
   const [logData, setLogData] = useState(null);
+  const [alertMsg, setalertMsg] = useState("Please wait...")
   const api_baseurl = process.env.REACT_APP_API_URL
+  const userId = JSON.parse(localStorage.getItem("user"))?.logIn?._id;
+  !userId && navigate("/")
   
   useEffect(() => {
     const fetchLogData = async () => {
       try {
-        const response = await axios.get(`${api_baseurl}/api/log?logId=${logId}`);
+        const response = await axios.get(`${api_baseurl}/api/log?logId=${logId}&userId=${userId}`);
         if(response.data.log){
         setLogData(response.data.log[0]);
-        }
+        }else{
+        setalertMsg("This log has been either deleted or you don't have its access.")
+      }
       } catch (error) {
         console.error('Error fetching log data:', error);
       }
     };
-
     if (logId) {
       fetchLogData();
     }
@@ -86,7 +90,7 @@ const View = () => {
       <div className="bg-gray-900 py-4 px-6 min-h-screen">
         {logData ? (
           <>
-          <p class="text-center text-red-500 mb-3 text-sm">NOTE: Photos may take 2-3 minutes to appear after logging.</p>
+          <p className="text-center text-red-500 mb-3 text-sm">NOTE: Photos may take 2-3 minutes to appear after logging.</p>
           <div className='flex justify-around items-center'>
             <p><IoTrash className='text-red-600 text-2xl' onClick={handleDeleteConfirmation} /></p>
             <h2 className="text-center font-bold text-gray-300 my-3 text-xl">
@@ -132,7 +136,9 @@ const View = () => {
             </div>
             {logData.note && <p className="text-gray-300 mt-10 mb-8">Note: {logData.note}</p>}
           </>
-        ) : 'No log found.'}
+        ) : (
+          <p className='text-center text-gray-300 my-12 px-5 text-sm'>{alertMsg}</p>
+          )}
       </div>
     </>
   );

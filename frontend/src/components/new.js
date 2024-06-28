@@ -27,7 +27,13 @@ function New() {
   const navigate = useNavigate()
   const auth = localStorage.getItem('user');
   const log = console.log
-  const userId = JSON.parse(localStorage.getItem("user")).logIn._id;
+  const userId = JSON.parse(localStorage.getItem("user"))?.logIn?._id;
+  useEffect(() => {
+    if (!JSON.parse(auth)?.logIn?._id) {
+      navigate('/login');
+    }
+  }, [navigate]);
+  
   const api_baseurl = process.env.REACT_APP_API_URL
   
     const animatedComponents = makeAnimated();
