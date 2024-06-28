@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import { Link, BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop';
 import Signup from './components/signup';
 import Login from './components/login';
 import Home from './home';
@@ -33,6 +34,7 @@ function App() {
   return (
     <div className="App">
     <BrowserRouter>
+    <ScrollToTop />
     <Nav/>
       <Routes>
         <Route path="/" element={<HomePage />}></Route>

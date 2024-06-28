@@ -477,6 +477,13 @@ app.post('/api/sendotp', async (req, res) => {
   const { userName, otp, email } = req.body;
 
   try {
+    const emailData = await Users.find({email})
+    if(emailData.length == 0){
+      res.json({
+      message: "Email doesn't exist",
+      icon: "error"
+    });
+    }
     const sendEmailResponse = await sendEmail(email, otp);
     res.json({
       message: 'OTP sent successfully',
