@@ -7,6 +7,7 @@ const api_baseurl = process.env.REACT_APP_API_URL;
 
 const DeleteProfile = () => {
   const [confirmationInput, setConfirmationInput] = useState('');
+  const navigate = useNavigate();
   const userId = JSON.parse(localStorage.getItem("user"))?.logIn?._id;
   const auth = localStorage.getItem('user');
   useEffect(() => {
@@ -15,7 +16,6 @@ const DeleteProfile = () => {
     }
   }, [navigate]);
   const [deleting, setdeleting] = useState(false)
-  const navigate = useNavigate();
   const logOut = () => {
   localStorage.removeItem('user');
   navigate('/login')
