@@ -477,7 +477,7 @@ app.post('/api/sendotp', async (req, res) => {
   const { userName, otp, email } = req.body;
 
   try {
-    const emailData = await Users.find({email})
+    const emailData = await User.find({email})
     if(emailData.length == 0){
       res.json({
       message: "Email doesn't exist",
