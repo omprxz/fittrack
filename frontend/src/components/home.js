@@ -18,25 +18,23 @@ const HomePage = () => {
             weight, height, body fat percentage, and progress through daily photo
             logging.
           </p>
-          <p className="text-white mb-5">
+          <p className="text-white">
             With seamless functionality and user-friendly design, staying committed
             to your health goals has never been easier.
           </p>
         </div>
-
-        <div className="rounded-lg px-6 pt-2.5 text-sm pb-4 w-full text-center text-white max-w-md">
-          <h2 className="text font-semibold mb-5 text-start">Here's what you can do with FitTrack:</h2>
-          <ul className="list-disc ml-6 text-start text-gray-200">
-            <li className="text-base mb-2">Keep track of things like your weight, height, and body fat.</li>
-            <li className="text-base mb-2">Take photos to see how your body changes over time.</li>
-            <li className="text-base mb-2">FitTrack is a web app where you can log your daily progress, including your body weight, height, and body fat percentage, so you can track your progress every day.</li>
-          </ul>
-        </div>
-
-        <div className="flex justify-center items-center">
-          <Link to={`${auth ? '/logs' : '/signup' }`} className="bg-blue-500 text-white font-bold mt-3 mb-8 py-2 px-4 rounded-full hover:bg-blue-600 transition duration-300">
+        <div className="flex justify-center items-center mb-3">
+          <Link to={`${auth ? '/logs' : '/signup' }`} className="bg-transparent border border-blue-600 rounded-full text-white font-bold my-3 py-2 px-6 rounded-full hover:bg-blue-700 transition duration-300">
             Get Started
           </Link>
+        </div>
+        <div className="rounded-lg px-6 pt-2.5 text-sm pb-4 w-full text-center text-white max-w-md">
+          <h2 className="text-lg font-semibold mb-5 text-start">Here's what you can do with FitTrack:</h2>
+          <ul className="list-disc ml-6 text-start text-gray-200 text-base">
+            <li className="mb-2">Keep track of things like your weight, height, and body fat.</li>
+            <li className="mb-2">Take photos to see how your body changes over time.</li>
+            <li className="mb-2">FitTrack is a web app where you can log your daily progress, including your body weight, height, and body fat percentage, so you can track your progress every day.</li>
+          </ul>
         </div>
     </div>
     </div>
