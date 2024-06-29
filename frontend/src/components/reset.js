@@ -16,6 +16,12 @@ const Reset = () => {
   const [otpSent, setotpSent] = useState(false)
   const [otpVerified, setotpVerified] = useState(false)
   const [otpSending, setotpSending] = useState(false)
+  useEffect(() => {
+     const auth = localStorage.getItem('user');
+    if (JSON.parse(auth)?.logIn?._id) {
+      navigate('/');
+    }
+}, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

@@ -21,7 +21,6 @@ export default function Settings() {
             <dt className="text text-gray-100 border-b border-gray-300 py-3 ps-1"><Link to="/categories">Categoires</Link></dt>
             <dt className="text text-gray-100 border-b border-gray-300 py-3 ps-1"><Link to="/data">Export Data</Link></dt>
             <dt className="text text-gray-100 border-b border-gray-300 py-3 ps-1"><Link to="/changepassword">Change Password</Link></dt>
-            <dt className="text text-gray-100 border-b border-gray-300 py-3 ps-1"><Link to="/reset">Reset Password</Link></dt>
             <dt className="text text-red-500 border-b border-gray-300 py-3 ps-1"><Link to="/deleteprofile">Delete Account & Data</Link></dt>
           </div>
         </dl>
