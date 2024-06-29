@@ -30,8 +30,9 @@ function App() {
         };
     }
 }, []);
+
   return (
-    <div className="App bg-gray-200">
+    <div className="App bg-gray-200 d">
     <BrowserRouter>
     <ScrollToTop />
     <Nav/>
