@@ -1,48 +1,42 @@
+![FitTrack Logo](https://github.com/omprxz/fittrack/blob/main/frontend/public/icon.png)
+
 # FitTrack
 
-![FitTrack Logo](frontend/public/icon.png)
+[Visit FitTrack](https://fittracknow.vercel.app)
 
-Welcome to FitTrack, your ultimate fitness companion, designed to help you track and manage your health and fitness journey with ease.
+## Overview
 
-## About
+FitTrack is a comprehensive fitness tracking app that allows users to securely log and monitor their daily progress. With FitTrack, users can track various fitness parameters and view their progress over time, all stored securely in one place.
 
-Whether you're aiming to lose weight, build muscle, or simply maintain a healthy lifestyle, FitTrack provides you with the tools and insights you need to achieve your goals.
+## Features
 
-## Key Features
+- **User Account Management**: Create an account to securely store and manage your fitness data.
+- **Daily Logs**: Track daily photos, weight, height, and body fat percentage.
+- **Categories**: Organize your logs by different categories and customize these categories in settings.
+- **Profile Updates**: Update your profile information anytime.
+- **View Logs**: Filter and view your logs by date or category.
+- **Secure Storage**: All logs are securely stored and can be viewed anytime.
+- **Notes**: Add notes to each log entry for additional context.
+- **Account Deletion**: Delete your account and all associated data from the server and database.
 
-- **Track Physical Measurements:** Monitor weight, height, and body fat percentage to stay on top of your progress.
-- **Progress Photos:** Capture your transformation visually by uploading progress photos and see your journey unfold.
-- **Log Exercise and Nutrition:** Keep a detailed record of your workouts, meals, and overall well-being to optimize your fitness regimen.
-- **Customizable Categories:** Personalize your tracking experience by customizing categories and tags to suit your individual preferences and goals.
-- **Real-time Feedback:** Stay motivated and on track with real-time feedback and motivational messages tailored to your progress.
+## Getting Started
 
-## Why FitTrack?
+1. **Create an Account**: Sign up to start logging your fitness data.
+2. **Log Your Data**: Begin logging your daily progress with photos, weight, height, and body fat percentage.
+3. **Organize and View Logs**: Use categories to organize your logs and filter them by date or category for easy viewing.
+4. **Secure Storage**: Rest assured that all your data is stored securely.
+5. **Manage Your Account**: Update your profile information as needed and delete your account if you choose, with all data being removed from the server and database.
 
-Taking control of your fitness has never been easier. FitTrack empowers users worldwide to transform their lives with its intuitive interface and powerful tracking capabilities.
+## Usage
 
-## Get Started
+1. **Sign Up**: Create an account to get started.
+2. **Log Daily Progress**: Track your fitness journey by logging daily photos and measurements.
+3. **Filter and View Logs**: Easily find specific logs by filtering them by date or category.
+4. **Customize Categories**: Tailor the app to your needs by customizing log categories in the settings.
+5. **Secure and Private**: Your data is kept safe and private at all times.
 
-Get started today and embark on your journey to a healthier, happier you with FitTrack!
+## Conclusion
 
-## Installation
+FitTrack is the perfect app for anyone looking to meticulously track their fitness journey. With its robust features and secure storage, you can confidently monitor your progress and achieve your fitness goals.
 
-To get started with FitTrack, follow these simple steps:
-
-1. Clone the repository:
-   ```
-   git clone https://github.com/omprxz/fittrack.git
-   ```
-
-2. Install dependencies:
-   ```
-   npm install
-   ```
-
-3. Start the application:
-   ```
-   npm start
-   ```
-
-## Support
-
-For any inquiries or assistance, please contact our support team at omprxz@gmail.com.
+For more information and to start using FitTrack, visit [FitTrack](https://fittracknow.vercel.app).
