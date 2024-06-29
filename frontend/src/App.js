@@ -32,7 +32,7 @@ function App() {
 }, []);
 
   return (
-    <div className="App bg-gray-200 d">
+    <div className="App bg-gray-200 ok">
     <BrowserRouter>
     <ScrollToTop />
     <Nav/>
