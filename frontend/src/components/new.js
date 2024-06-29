@@ -135,6 +135,51 @@ function New() {
     e.preventDefault();
     log(images)
     let categFinal = categories.map(c => c.value)
+    
+    if(weight < 0){
+      Toast.fire({
+        text: "Weight can't be negative",
+        icon: "warning"
+      })
+      return;
+    }
+    if(height < 0){
+      Toast.fire({
+        text: "Height can't be negative",
+        icon: "warning"
+      })
+      return;
+    }
+    if(fat < 0){
+      Toast.fire({
+        text: "Fat can't be negative",
+        icon: "warning"
+      })
+      return;
+    }
+    
+    if(weight > 99999){
+      Toast.fire({
+        text: "Too much weight",
+        icon: "warning"
+      })
+      return;
+    }
+    if(height > 99999){
+      Toast.fire({
+        text: "Too much height",
+        icon: "warning"
+      })
+      return;
+    }
+    if(fat > 99999){
+      Toast.fire({
+        text: "Too much fat",
+        icon: "warning"
+      })
+      return;
+    }
+    
     const formData = new FormData();
 
     formData.append("userId", userId);
