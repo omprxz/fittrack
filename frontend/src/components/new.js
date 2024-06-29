@@ -361,7 +361,7 @@ function New() {
           type="number"
           name="weight"
           id="weight"
-          className="block w-full rounded-md border-0 py-2 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-2 bg-gray-800 pl-2 pr-20 text-gray-200 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="Weight"
           value={weight}
           onChange={(e) => setWeight(e.target.value)}
@@ -388,7 +388,7 @@ function New() {
           type="number"
           name="height"
           id="height"
-          className="block w-full rounded-md border-0 py-2 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-2 pl-2 pr-20 text-gray-200 bg-gray-800 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="Height"
           value={height}
           onChange={(e) => setHeight(e.target.value)}
@@ -417,7 +417,7 @@ function New() {
         <input
           type="number"
           name="fat"
-          className="block w-full rounded-md border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-2 pl-10 text-gray-200 bg-gray-800 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="Fat Percentage"
            value={fat}
            onChange={(e) => setFat(e.target.value)}
@@ -426,7 +426,7 @@ function New() {
       
       <div className="mt-4">
         <p className='text-white text-[0.93rem] mb-1 font-bold'>Note:</p>
-        <textarea id="note" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 outline-0" placeholder="Log notes..."  value={note}
+        <textarea id="note" rows="4" className="block p-2.5 w-full text-sm text-gray-200 bg-gray-800 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 outline-0" placeholder="Log notes..."  value={note}
             onChange={(e) => setNote(e.target.value)}></textarea>
 
       </div>

@@ -16,7 +16,7 @@ export default function Card(props) {
     <Link to={`/logs/${props.logId}/edit`} className="rounded bg-blue-600 px-5 py-1">Edit</Link>
 </div>
     <div className="dateLog flex flex-col rounded bg-clip-border bg-transparent">
-          <div className="logPhotos flex flex-row flex-nowrap overflow-auto rounded-lg max-h-64 gap-2 p-3 bg-gray-600" style={{ scrollbarWidth: 'none' }}>
+          <div className="logPhotos flex flex-row flex-nowrap overflow-auto rounded-lg max-h-64 gap-2 p-3 bg-gray-700" style={{ scrollbarWidth: 'none' }}>
           {
             props.imgs.map((imgid, ind) => ( <img src={`https://lh3.googleusercontent.com/d/${imgid}=w1000`} className="object-cover rounded-xl shadow-md shadow-gray-800" alt="log image" />
             ))}

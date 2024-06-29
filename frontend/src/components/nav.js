@@ -62,7 +62,7 @@ const navigationItems = [
   navigate('/login')
   }
  return (
-  <Disclosure as="nav" className="bg-gray-900">
+  <Disclosure as="nav" className="bg-gray-900 sticky top-0 z-20">
     {({ open }) => (
       <>
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -180,13 +180,13 @@ const navigationItems = [
           <Disclosure.Panel className="sm:hidden" static>
              {({ close }) => (
           <>
-            <div className="space-y-1 px-2 pb-3 pt-2">
+            <div className="space-y-1 px-2 pb-3 pt-2 text-center">
             {navigationItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.to}
                 className={classNames(
-                  item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                  item.current ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                   'block rounded-md px-3 py-2 text-base font-medium'
                 )}
                 aria-current={item.current ? 'page' : undefined}

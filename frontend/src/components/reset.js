@@ -19,7 +19,7 @@ const Reset = () => {
   useEffect(() => {
      const auth = localStorage.getItem('user');
     if (JSON.parse(auth)?.logIn?._id) {
-      navigate('/');
+      navigate('/logs');
     }
 }, []);
 
@@ -108,12 +108,13 @@ const Reset = () => {
   const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-10 bg-gray-900">
-      <h1 className="text-2xl text-gray-100 font-bold text-center mb-5">Reset Password</h1>
+    <div className="bg-gray-900 min-h-screen my-0 py-2 px-4">
+    <div className="bg-gradient-to-b from-[#3a1c35] via-[#221b3a] to-gray-900 rounded-md py-4">
+      <h1 className="text-2xl text-gray-100 font-bold text-center mb-5 mt-3">Reset Password</h1>
       {alertMessage && (
         <div className={`p-2 rounded ${alertMessageColor} text-white text-center mb-4`}>{alertMessage}</div>
       )}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
         <input
           type="text"
           name="email"
@@ -121,9 +122,9 @@ const Reset = () => {
           onChange={handleChange}
           placeholder="Email"
           disabled={otpSent || otpVerified}
-          className="p-2 rounded border-2 border-gray-600 outline-none text-gray-900"
+          className="py-1.5 px-3 rounded-md border-2 border-gray-600 outline-none text-gray-200 placeholder:text-gray-300 bg-gray-800"
         />
-        <button type="submit" disabled={otpSending} className={`${otpSent ? 'hidden' : 'block'} bg-gray-800 text-white py-2 rounded disabled:bg-gray-700`}>{otpSending ? 'Sending OTP' : 'Send OTP'}</button>
+        <button type="submit" disabled={otpSending} className={`${otpSent ? 'hidden' : 'block'} bg-gray-800 text-white py-2 w-32 rounded disabled:bg-gray-600 shadow-sm shadow-gray-700`}>{otpSending ? 'Sending OTP' : 'Send OTP'}</button>
       </form>
       {otpSent && (
         <div className="mt-4 flex flex-col gap-4">
@@ -159,8 +160,9 @@ const Reset = () => {
       )}
       <div className="mt-4 text-gray-300 text-center">
         Remember your password?{' '}
-        <Link to="/login" className="text-blue-700 underline">Login here</Link>
+        <Link to="/login" className="text-purple-500 no-underline">Login here</Link>
       </div>
+    </div>
     </div>
   );
 };

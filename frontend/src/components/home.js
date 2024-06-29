@@ -6,8 +6,9 @@ const HomePage = () => {
   const auth = localStorage.getItem('user');
 
   return (
-    <>
-        <div className="bg-gradient-to-br from-purple-500 to-blue-500 flex flex-col justify-center items-center px-5 pt-8">
+    <div className="bg-gray-900 min-h-screen my-0 py-3 px-4">
+    <div className="bg-gradient-to-b from-[#3a1c35] via-[#221b3a] to-gray-900 rounded-md">
+        <div className="bg-transparent mx-3 my-4 rounded-lg flex flex-col justify-center items-center px-5 pt-8">
           <h1 className="text-3xl font-bold text-white mb-5">Welcome to FitTrack</h1>
           <p className="text-white mb-5">
             Where your journey to a healthier you begins!
@@ -23,12 +24,12 @@ const HomePage = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-lg p-6 pb-4 w-full text-center max-w-md">
-          <h2 className="text-lg font-semibold mb-5">Here's what you can do with FitTrack:</h2>
-          <ul className="list-disc ml-6">
-            <li className="text-base text-gray-800 mb-2">Keep track of things like your weight, height, and body fat.</li>
-            <li className="text-base text-gray-800 mb-2">Take photos to see how your body changes over time.</li>
-            <li className="text-base text-gray-800 mb-2">FitTrack is a web app where you can log your daily progress, including your body weight, height, and body fat percentage, so you can track your progress every day.</li>
+        <div className="rounded-lg px-6 pt-2.5 text-sm pb-4 w-full text-center text-white max-w-md">
+          <h2 className="text font-semibold mb-5 text-start">Here's what you can do with FitTrack:</h2>
+          <ul className="list-disc ml-6 text-start text-gray-200">
+            <li className="text-base mb-2">Keep track of things like your weight, height, and body fat.</li>
+            <li className="text-base mb-2">Take photos to see how your body changes over time.</li>
+            <li className="text-base mb-2">FitTrack is a web app where you can log your daily progress, including your body weight, height, and body fat percentage, so you can track your progress every day.</li>
           </ul>
         </div>
 
@@ -37,7 +38,8 @@ const HomePage = () => {
             Get Started
           </Link>
         </div>
-    </>
+    </div>
+    </div>
   );
 };
 

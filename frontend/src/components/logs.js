@@ -159,8 +159,8 @@ const handleCheckboxChange = (id) => {
   }
 
   return (
-    <div className="bg-gray-200 min-h-screen py-3">
-    <p class="text-center text-red-500 mb-3 text-sm">NOTE: Photos may take 2-3 minutes to appear after logging.</p>
+    <div className="bg-gradient-to-b from-[#3a1c35] via-[#221b3a] to-[#0b0e14] min-h-screen py-3">
+    <p class="text-center text-red-400 mb-3 text-sm">NOTE: Photos may take 2-3 minutes to appear after logging.</p>
 <ul className="flex flex-col px-2.5 gap-y-1.5 mb-4">
    <li className="rounded-2xl">
   <Datepicker
@@ -179,7 +179,7 @@ const handleCheckboxChange = (id) => {
     </li>
   <li className="flex justify-between overscroll-none gap-1 border-[1px] border-gray-400 rounded px-1 py-1">
     <input type="checkbox" id="date-order" className="hidden peer" onChange={handleLatestChange} checked={isLatest} />
-   <label htmlFor="date-order" className="inline-flex items-center rounded px-5 py-2 shadow shadow-inner shadow-gray-400 w-auto text-gray-900 bg-gray-200 cursor-pointer peer-checked:bg-gray-900 peer-checked:text-white peer-checked:shadow-gray-600">
+   <label htmlFor="date-order" className="inline-flex items-center rounded px-5 py-2 shadow-inner shadow-gray-700 w-auto text-gray-900 bg-gray-300 cursor-pointer peer-checked:bg-gray-900 peer-checked:text-white peer-checked:shadow-gray-700">
       <div className="block">
             <div className="text-sm font-bold">{isLatest ? 'Latest' : 'Oldest'}</div>
         </div>
@@ -197,7 +197,7 @@ const handleCheckboxChange = (id) => {
           onChange={() => handleCheckboxChange({category})}
           checked={selectedCategories.includes(category)}
         />
-        <label htmlFor={category} className={`inline-flex items-center px-5 py-1.5 my-0.5 rounded shadow-inner shadow-gray-500 text-gray-900 bg-gray-200 cursor-pointer peer-checked:bg-gray-800 peer-checked:text-white peer-checked:shadow-gray-700`}>
+        <label htmlFor={category} className={`inline-flex items-center px-5 py-1.5 my-0.5 rounded shadow-inner shadow-gray-700 text-gray-900 bg-gray-300 cursor-pointer peer-checked:bg-gray-900 peer-checked:text-white peer-checked:shadow-gray-700`}>
           <div className="block whitespace-nowrap">
             <div className="text-sm font-bold">{category}</div>
           </div>
@@ -206,7 +206,7 @@ const handleCheckboxChange = (id) => {
     ))
   : ( 
     <>
-      <p className="text-sm text-gray-400">No categories.</p>
+      <p className="text-sm text-gray-300">No categories.</p>
     </>
   )
 }
@@ -215,11 +215,11 @@ const handleCheckboxChange = (id) => {
 </li>
  
 </ul>
-    <p className='text-center my-3'><Link to='/logs/new' className='text-s text-blue-600 underline underline-offset-1' >Create New +</Link></p>
+    <p className='text-center my-3'><Link to='/logs/new' className='text-s text-blue-600' >Create New +</Link></p>
       {logs.length > 0 ? (
         <>
           <div className="allLogs">
-            <h1 className='font-bold text-2xl my-3 text-center'>Logs</h1>
+            <h1 className='font-bold text-2xl my-3 text-center text-white'>Logs</h1>
             <div className="dateLogs grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 place-items-center px-8 gap-5 mb-6 mt-1">
               {logs.map((log, index) => (
                 <div key={index}>
