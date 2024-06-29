@@ -359,6 +359,8 @@ function New() {
       <div className="relative shadow-sm mt-1">
         <input
           type="number"
+          min={0}
+          max={1000}
           name="weight"
           id="weight"
           className="block w-full rounded-md border-0 py-2 bg-gray-800 pl-2 pr-20 text-gray-200 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -386,6 +388,8 @@ function New() {
       <div className="relative shadow-sm mt-3">
         <input
           type="number"
+          min={0}
+          max={1000}
           name="height"
           id="height"
           className="block w-full rounded-md border-0 py-2 pl-2 pr-20 text-gray-200 bg-gray-800 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -417,6 +421,8 @@ function New() {
         <input
           type="number"
           name="fat"
+          min={0}
+          max={1000}
           className="block w-full rounded-md border-0 py-2 pl-10 text-gray-200 bg-gray-800 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="Fat Percentage"
            value={fat}
