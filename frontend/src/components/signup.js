@@ -19,6 +19,7 @@ function Signup() {
     password:'',
     ip:''
   })
+  const [signing, setsigning] = useState(false)
   
   const handleChange = (e) => {
     setFormData({
@@ -45,7 +46,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      
+      setsigning(true)
       const response = await axios.post(api_baseurl+'/api/signup', formData);
       if(response.data.signedUp === true){
       navigate('/login', { state: { successMessage: 'Account created successfully. Please proceed to login.' } });
@@ -63,7 +64,9 @@ function Signup() {
       
     }catch(error){
       console.error("Error while saving: ", error)
+      setsigning(false)
     }
+    setsigning(false)
   }
   
   return(
@@ -86,7 +89,7 @@ function Signup() {
   onChange={handleChange}
   placeholder="Password" />
   <span className="loginLink text-gray-800">Already have an account? <Link to="/login" className="text-purple-800 no-underline">Login Here</Link></span>
-  <button type="submit" className="m-auto px-5 py-1.5 mt-4 text-[15px] text-white bg-gray-700 border-0 rounded">Sign up</button>
+  <button type="submit" disabled={signing} className="m-auto px-5 py-1.5 mt-4 text-[15px] text-white bg-gray-800 border-0 rounded disabled:bg-gray-600">{signing ? 'Please wait' : 'Sign up'}</button>
 </form></div>
   </div>
   );
