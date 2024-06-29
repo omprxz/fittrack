@@ -23,7 +23,7 @@ const HomePage = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-lg p-6 pb-4 max-w-md">
+        <div className="bg-white rounded-lg p-6 pb-4 w-full text-center max-w-md">
           <h2 className="text-lg font-semibold mb-5">Here's what you can do with FitTrack:</h2>
           <ul className="list-disc ml-6">
             <li className="text-base text-gray-800 mb-2">Keep track of things like your weight, height, and body fat.</li>

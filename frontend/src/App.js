@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import { Analytics } from "@vercel/analytics/react"
 import { Link, BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import Signup from './components/signup';
