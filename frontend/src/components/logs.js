@@ -233,7 +233,7 @@ const handleCheckboxChange = (id) => {
           </div>
         </>
       ) : (
-        <p className="py-10 text-center text-gray-800">{alertMsg}</p>
+        <p className="py-10 text-center text-gray-400">{alertMsg}</p>
       )}
     </div>
   );
