@@ -34,6 +34,7 @@ function App() {
   return (
     <div className="App bg-gray-200">
     <BrowserRouter>
+    <Analytics />
     <ScrollToTop />
     <Nav/>
       <Routes>
