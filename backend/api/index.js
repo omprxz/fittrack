@@ -350,17 +350,34 @@ app.get("/api/usermeta", async (req, resp) => {
   const { userId } = req.query;
 
   try {
-    const latestLog = await Logs.findOne({ userId }).sort({ date: -1 });
-    const totalLogs = await Logs.countDocuments({ userId });
+    const logs = await Logs.find({ userId }).sort({ date: -1 }).lean();
+    const totalLogs = logs.length;
 
     const response = {
-      weight: latestLog?.weight,
-      height: latestLog?.height,
-      weightUnit: latestLog?.weightUnit,
-      heightUnit: latestLog?.heightUnit,
-      fat: latestLog?.fat,
+      weight: null,
+      height: null,
+      weightUnit: null,
+      heightUnit: null,
+      fat: null,
       totalLogs: totalLogs
     };
+
+    for (const log of logs) {
+      if (response.weight === null && log.weight !== undefined) {
+        response.weight = log.weight;
+        response.weightUnit = log.weightUnit;
+      }
+      if (response.height === null && log.height !== undefined) {
+        response.height = log.height;
+        response.heightUnit = log.heightUnit;
+      }
+      if (response.fat === null && log.fat !== undefined) {
+        response.fat = log.fat;
+      }
+      if (response.weight !== null && response.height !== null && response.fat !== null) {
+        break;
+      }
+    }
 
     resp.json({
       message: "Details fetched",
