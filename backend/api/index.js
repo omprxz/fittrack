@@ -140,6 +140,7 @@ app.get("/", (req, resp) => {
 })
 
 app.post("/api/signup", async (req, resp) => {
+    try{
     await connectToMongoDB()
     const { name, email, password, ip } = req.body;
     if (name && email && password) {
@@ -173,6 +174,12 @@ app.post("/api/signup", async (req, resp) => {
     } else {
         resp.json({
             message: "All fields mandatory"
+        });
+    }
+    }catch(e){
+      console.log(e)
+       resp.json({
+            message: "Something went wrong"
         });
     }
 });
