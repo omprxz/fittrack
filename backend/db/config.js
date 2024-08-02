@@ -10,4 +10,4 @@ async function connectToMongoDB() {
   }
 }
 
-connectToMongoDB();
+module.exports = connectToMongoDB;

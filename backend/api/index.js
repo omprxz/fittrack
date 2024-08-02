@@ -13,7 +13,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config()
 
 
-require("../db/config");
+const connectToMongoDB = require("../db/config");
 
 const User = require("../db/User");
 const Categories = require("../db/Categories");
@@ -140,6 +140,7 @@ app.get("/", (req, resp) => {
 })
 
 app.post("/api/signup", async (req, resp) => {
+    await connectToMongoDB()
     const { name, email, password, ip } = req.body;
     if (name && email && password) {
         if (!emailRegex.test(email)) {
