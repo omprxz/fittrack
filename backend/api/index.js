@@ -186,6 +186,7 @@ app.post("/api/signup", async (req, resp) => {
 
 app.post("/api/login", async (req, resp) => {
     try {
+      await connectToMongoDB()
         const { email, password } = req.body;
         
         if (email && password) {
@@ -227,6 +228,7 @@ app.post("/api/login", async (req, resp) => {
 app.get("/api/user", async (req, resp) => {
   const {userId} = req.query
   try{
+    await connectToMongoDB()
   const response = await User.findOne({_id: userId}).select("-password -_id -ip")
   if(response){
     resp.json({
@@ -247,6 +249,7 @@ app.delete("/api/user", async (req, resp) => {
   const { userId } = req.body;
 
   try {
+    await connectToMongoDB()
     const user = await User.findOne({ _id: userId });
     if (!user) {
       return resp.json({
@@ -294,6 +297,7 @@ app.delete("/api/user", async (req, resp) => {
 });
 app.put("/api/user", upload.single("profile"), async (req, resp) => {
   const { name, email, userId } = req.body
+  await connectToMongoDB()
   let update;
   if(req.file){
     const sizeLimitInMB = 2;
@@ -359,6 +363,7 @@ app.get("/api/usermeta", async (req, resp) => {
   const { userId } = req.query;
 
   try {
+    await connectToMongoDB()
     const logs = await Logs.find({ userId }).sort({ date: -1 }).lean();
     const totalLogs = logs.length;
 
@@ -400,6 +405,7 @@ app.get("/api/usermeta", async (req, resp) => {
 
 app.patch('/api/user/password', async (req, resp) => {
   const { userId, currentPassword, newPassword } = req.body;
+  await connectToMongoDB()
   if(currentPassword == ""){
       return resp.json({
         message: 'Current password required',
@@ -447,7 +453,7 @@ app.patch('/api/user/password', async (req, resp) => {
 
 app.patch('/api/user/deletepp', async (req, res) => {
   const { userId } = req.body;
-
+await connectToMongoDB()
   if (!userId) {
     return res.json({ message: 'User ID is required', icon: 'error' });
   }
@@ -479,6 +485,7 @@ app.patch('/api/user/deletepp', async (req, res) => {
 app.get('/api/user/export', async (req, res) => {
   const { userId } = req.query;
   try {
+    await connectToMongoDB()
     const categories = await Categories.find({ userId }).select("-_id").select("-userId").select("-created_at").select("-updated_at");
     const logs = await Logs.find({ userId }).select("-_id").select("-userId").select("-created_at").select("-updated_at");
 
@@ -503,6 +510,7 @@ app.post('/api/sendotp', async (req, res) => {
   const { userName, otp, email } = req.body;
 
   try {
+    await connectToMongoDB()
     const emailData = await User.find({email})
     if(emailData.length > 0){
     const sendEmailResponse = await sendEmail(email, otp);
@@ -530,6 +538,7 @@ app.post('/api/resetpassword', async (req, res) => {
   const { userName, password } = req.body;
 
   try {
+    await connectToMongoDB()
     await User.updateOne({ email: userName }, { $set: { password } });
 
     res.json({
@@ -550,6 +559,7 @@ app.post("/api/categories", async (req, resp) => {
     const { userId, categories } = req.body;
     if (userId && categories) {
         try {
+          await connectToMongoDB()
             let existingUser = await Categories.findOne({ userId });
             if (existingUser) {
                 // User exists, update categories
@@ -591,6 +601,7 @@ app.get("/api/categories", async (req, resp) => {
     const { userId, noResp } = req.query;
     if (userId) {
         try {
+          await connectToMongoDB()
             const categ = await Categories.find({ userId }).select("categories");
             //logC(categ)
             if (categ.length > 0) {
@@ -618,6 +629,7 @@ app.delete("/api/categories", async (req, resp) => {
     const { preValues, userId } = req.body;
     if (preValues !== undefined && userId) {
         try {
+          await connectToMongoDB()
             const user = await Categories.findOne({ userId });
             if (user) {
                 const promises = preValues.map(async (preValue) => {
@@ -663,6 +675,7 @@ app.put("/api/categories", async (req, resp) => {
     const { userId, preValue, newValue } = req.body;
     if (userId && preValue !== undefined && newValue !== undefined) {
         try {
+          await connectToMongoDB()
             const user = await Categories.findOne({ userId });
             if (user) {
                 if (user.categories.includes(preValue)) {
@@ -709,6 +722,7 @@ app.put("/api/categories", async (req, resp) => {
 
 app.post("/api/log", upload.array("photos", 8), async (req, resp) => {
   try {
+    await connectToMongoDB()
     let {
       userId,
       date,
@@ -859,6 +873,7 @@ app.post("/api/log", upload.array("photos", 8), async (req, resp) => {
 app.get("/api/log", async (req, resp) => {
     const { logId, userId } = req.query;
     try {
+      await connectToMongoDB()
         const logFetched = await Logs.find({ _id: logId, userId });
         if(logFetched.length > 0){
             resp.json({
@@ -879,6 +894,7 @@ app.get("/api/log", async (req, resp) => {
 
 app.put("/api/log", upload.array("photos", 8), async (req, resp) => {
   try {
+    await connectToMongoDB()
     let {
       userId,
       logId,
@@ -1071,6 +1087,7 @@ app.put("/api/log", upload.array("photos", 8), async (req, resp) => {
 app.delete("/api/log", async (req, resp) => {
     let { logId } = req.body;
     try {
+      await connectToMongoDB()
         if (logId) {
             const logFetched = await Logs.find({ _id: logId });
             const Delete = await Logs.deleteOne({
@@ -1105,7 +1122,7 @@ app.delete("/api/log", async (req, resp) => {
 
 app.get("/api/logs", async (req, resp) => {
   let { userId, categories, start_date, end_date, isLatest } = req.query;
-
+await connectToMongoDB()
   const query = { userId };
 
   if (categories && (start_date || end_date)) {
